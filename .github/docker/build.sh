@@ -5,6 +5,7 @@ KEY=$2
 SCONS_FLAGS=warnings=no progress=no productions=yes profile=custom.py build_feature_profile=feature_profile.build
 SCONS_CACHE=/github/workspace/.scons-cache/
 BIN_DIR=/github/workspace/bin
+export TERM=xterm
 
 echo Building $PLATFORM
 
