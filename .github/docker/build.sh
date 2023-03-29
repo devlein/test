@@ -9,6 +9,7 @@ BIN_DIR=/github/workspace/bin
 echo Building $PLATFORM
 
 cd godot-4.0
+rm -rf editor
 
 mkdir -p $BIN_DIR
 mkdir -p $SCONS_CACHE
