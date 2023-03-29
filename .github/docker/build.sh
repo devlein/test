@@ -15,15 +15,16 @@ if [ ${#KEY} -ge 5 ]; then
 fi
 
 if [ "$PLATFORM" == "windows" ]; then
-  scons platform=windows ${SCONS} arch=x86_64 use_mingw=yes target=template_release
-  scons platform=windows ${SCONS} arch=x86_64 use_mingw=yes target=template_debug
+  scons platform=windows ${SCONS} arch=x86_64 use_mingw=yes target=template_releasev
   
   mv bin/godot.windows.template_release.x86_64.exe bin/out/windows_release_x86_64.exe
-  mv bin/godot.windows.template_debug.x86_64.exe bin/out/windows_debug_x86_64.exe
   mv bin/godot.windows.template_release.x86_64.console.exe bin/out/windows_release_x86_64_console.exe
-  mv bin/godot.windows.template_debug.x86_64.console.exe bin/out/windows_debug_x86_64_console.exe
   
-  strip bin/windows*.exe
+  #scons platform=windows ${SCONS} arch=x86_64 use_mingw=yes target=template_debug
+  #mv bin/godot.windows.template_debug.x86_64.exe bin/out/windows_debug_x86_64.exe
+  #mv bin/godot.windows.template_debug.x86_64.console.exe bin/out/windows_debug_x86_64_console.exe
+  
+  strip bin/out/windows*.exe
   
 elif [ "$PLATFORM" == "linuxbsd" ]; then
   scons platform=linuxbsd ${SCONS} arch=x86_64 target=template_release
