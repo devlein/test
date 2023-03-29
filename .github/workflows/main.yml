@@ -42,13 +42,9 @@ jobs:
         run: |
           chmod 744 .github/docker/build.sh
           docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
-
-
-
-        
-
+      
       - name: Setup Build Profiles
-        if: ${{matrix.active}}
+        continue-on-error: true
         run: |
           echo "${{ vars[format('{0}_PROFILE', github.event.inputs.profile)] }}" >> custom.py
           echo "${{ vars[format('{0}_FEATURE_PROFILE', github.event.inputs.profile)] }}" >> feature_profile.build
@@ -57,12 +53,13 @@ jobs:
         run: docker run -v "${{github.workspace}}":"/github/workspace" --workdir="/github/workspace" container ${{matrix.name}} ${{env.SECRET_KEY}} 
 
       - name: Prepare Artifact
+        continue-on-error: true
         run: |
-          ls -la bin/out
           ls -la bin
           ls -la 
 
       - name: Upload Artifact
+        continue-on-error: true
         uses: actions/upload-artifact@v3
         with:
           name: templates
