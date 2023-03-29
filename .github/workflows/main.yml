@@ -16,7 +16,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        name: ["linuxbsd"]
+        name: ["windows"]
 
     steps:
       - name: Checkout
@@ -63,5 +63,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: templates
-          path: bin/out/*
+          path: bin/*
           retention-days: 3
