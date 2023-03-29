@@ -1,0 +1,80 @@
+ 151 lines (133 sloc) 5.04 KB
+name: 🛠️ Matrix
+on: 
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: ENV Profile
+        default: "DEFAULT"
+        required: true
+
+env:
+  SCONSCACHE: ${{ github.workspace }}/.scons-cache/
+  SCONSFLAGS: verbose=no werror=no debug_symbols=no tools=no lto=full productions=yes
+  SCONSFILES: profile=custom.py build_feature_profile=feature_profile.build
+  SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 10
+      matrix:
+
+        include:
+          - name: Windows
+            platform: windows
+            sconsflags: arch=x86_64 use_mingw=yes
+
+
+    steps:
+      - name: Checkout Godot
+        uses: actions/checkout@v3
+        with:
+          repository: godotengine/godot
+          ref: "4.0"
+
+      - name: Setup Dependencies
+        run: |
+          rm -rf editor
+          python -m pip install scons > /dev/null
+          gcc --version
+          python -c "import sys; print(sys.version)"
+          scons --version
+      - name: Setup Windows Dependencies (mingw-w64)
+        if: ${{ matrix.platform == 'windows' }}
+        run: |
+            sudo apt-get install mingw-w64 > /dev/null
+            echo "1" | sudo update-alternatives --config x86_64-w64-mingw32-g++ > /dev/null
+
+
+      - name: Setup build cache
+        uses: actions/cache@v3
+        with:
+          path: ${{env.SCONSCACHE}}
+          key: sconscache-${{matrix.platform}}
+          restore-keys: sconscache-${{matrix.platform}}
+
+      - name: Prepare Artifact
+        run: ls -la
+
+
+      - name: Building
+        if: ${{ matrix.platform != 'android' }}
+        env:
+          SCONSFLAGS: ${{env.SCONSFLAGS}} ${{matrix.sconsflags}}
+          SCONS_CACHE: ${{env.SCONSCACHE}}
+          SCONS_CACHE_LIMIT: 5120
+        run: scons platform=${{matrix.platform}} target=template_release ${{env.SCONSFLAGS}} ${{env.SCONSFILES}}
+
+
+
+      - name: Prepare Artifact
+        run: ls -la bin
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: godot_templates
+          path: bin/*
+          retention-days: 3
