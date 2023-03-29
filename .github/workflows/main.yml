@@ -1,0 +1,65 @@
+name: CI
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: ENV Profile
+        default: DEFAULT
+        required: true
+
+env:
+  SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        name: ["windows", "linuxbsd"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup build cache
+        env:
+          CACHE_NAME: sconscache
+        uses: actions/cache@v3
+        with:
+          path: .scons-cache/
+          key: sconscache-${{matrix.name}}
+          restore-keys: sconscache-${{matrix.name}}
+
+      - name: Build Docker Image
+        run: |
+          chmod 744 .github/docker/build.sh
+          docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
+
+      - name: Checkout Godot
+        uses: actions/checkout@v3
+        with:
+          repository: godotengine/godot
+          ref: "4.0"
+
+      - name: Setup Build Profiles
+        if: ${{matrix.active}}
+        run: |
+          echo "${{ vars[format('{0}_PROFILE', github.event.inputs.profile)] }}" >> custom.py
+          echo "${{ vars[format('{0}_FEATURE_PROFILE', github.event.inputs.profile)] }}" >> feature_profile.build
+
+      - name: Run Docker Image
+        run: docker run -v "${{github.workspace}}":"/github/workspace" --workdir="/github/workspace" container ${{matrix.name}} ${{env.SECRET_KEY}} 
+
+      - name: Prepare Artifact
+        run: |
+          ls -la bin/out
+          ls -la bin
+          ls -la 
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: templates
+          path: bin/out/*
+          retention-days: 3
