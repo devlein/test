@@ -51,7 +51,9 @@ jobs:
       run: scons platform=windows target=template_release ${{env.SCONSFLAGS}} ${{env.SCONSFILES}}
       
     - name: Prepare Artifact
-      run: ls -la bin
+      run: |
+        strip bin/windows*.exe
+        ls -la bin
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
