@@ -1,1 +1,57 @@
+name: 🛠️ Builder
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Godot Version
+        default: "4.0.1"
+        required: true
+      profile:
+        description: ENV Profile
+        default: "DEFAULT"
+        required: true
 
+env:
+  SCONSCACHE: ${{ github.workspace }}/.scons-cache/
+  SCONSFLAGS: verbose=no werror=no lto=full productions=yes
+  SCONSFILES: profile=custom.py build_feature_profile=feature_profile.build
+  SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
+
+jobs:
+  Windows:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Prepare Enviroment
+      run: |
+        curl -fLO https://github.com/godotengine/godot/archive/refs/heads/4.0.zip
+        unzip -q 4.0.zip -x ".github/*"
+        rm -rf editor
+        python -m pip install scons > /dev/null
+        sudo apt-get -q install mingw-w64 > /dev/null
+        echo "1" | sudo update-alternatives --config x86_64-w64-mingw32-g++ > /dev/null
+        gcc --version
+        python -c "import sys; print(sys.version)"
+        scons --version
+        
+    - name: Setup build cache
+      uses: actions/cache@v3
+      with:
+        path: ${{env.SCONSCACHE}}
+        key: sconscache-windows
+        restore-keys: sconscache-windows
+        
+    - name: Building
+      env:
+        SCONS_CACHE: ${{env.SCONSCACHE}}
+        SCONS_CACHE_LIMIT: 5120
+      run: scons platform=windows target=template_release ${{env.SCONSFLAGS}} ${{env.SCONSFILES}}
+      
+    - name: Prepare Artifact
+      run: ls -la bin
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: godot_templates
+        path: bin/*
+        retention-days: 3
