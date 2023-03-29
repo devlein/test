@@ -22,6 +22,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Download and extract Godot
+        shell: bash
+        run: |
+          curl -fLO https://github.com/godotengine/godot/archive/refs/heads/4.0.zip
+          unzip 4.0.zip -q -x ".github/*"
+          ls -la
+
       - name: Setup build cache
         env:
           CACHE_NAME: sconscache
@@ -36,12 +43,7 @@ jobs:
           chmod 744 .github/docker/build.sh
           docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
 
-      - name: Download and extract Godot
-        shell: bash
-        run: |
-          curl -fLO https://github.com/godotengine/godot/archive/refs/heads/4.0.zip
-          unzip 4.0.zip -q -x ".github/*"
-          ls -la godot-4.0
+
 
         
 
