@@ -29,7 +29,8 @@ jobs:
           sudo apt-get -q install mingw-w64 > /dev/null
           echo "1" | sudo update-alternatives --config x86_64-w64-mingw32-g++ > /dev/null
           python -m pip install scons > /dev/null
-          gcc --version
+          gcc -v
+          ld -v
           python -c "import sys; print(sys.version)"
           scons --version
 
