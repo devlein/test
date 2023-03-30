@@ -43,7 +43,7 @@ elif [ "$PLATFORM" == "linuxbsd" ]; then
   ls -la
   tar xf /root/godot.tar.gz --strip-components=1
   
-  #sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
+  sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
   #export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
   scons platform=linuxbsd arch=x86_64 lto=full ${SCONS_FLAGS} target=template_release
   #scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64 target=template_debug
