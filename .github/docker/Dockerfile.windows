@@ -5,8 +5,8 @@ WORKDIR /github/workspace
 CMD /bin/bash
 
 RUN dnf -y -q install --setopt=install_weak_deps=False \
-  bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz binutils \
-  mingw32-gcc mingw32-gcc-c++ mingw32-winpthreads-static mingw64-gcc mingw64-gcc-c++ mingw64-winpthreads-static
+    bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz binutils \
+    mingw32-gcc mingw32-gcc-c++ mingw32-winpthreads-static mingw64-gcc mingw64-gcc-c++ mingw64-winpthreads-static
 
 RUN pip install scons
 
