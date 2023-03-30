@@ -39,15 +39,19 @@ if [ "$PLATFORM" == "windows" ]; then
 elif [ "$PLATFORM" == "linuxbsd" ]; then
   sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
   export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
+  dir
+  wget -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/4.0.1-stable.tar.gz
+  tar xf /root/godot.tar.gz --strip-components=1
   
   scons platform=linuxbsd arch=x86_64 lto=full ${SCONS_FLAGS} target=template_release
   #scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64 target=template_debug
   
-  mv bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
+  #mv bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
+  cp bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
   #mv bin/godot.linuxbsd.template_debug.x86_64 $BIN_DIR/linux_debug.x86_64
-  ls -la $BIN_DIR
-  strip $BIN_DIR/linux*
-  ls -la $BIN_DIR
+  #ls -la $BIN_DIR
+  #strip $BIN_DIR/linux*
+  #ls -la $BIN_DIR
 elif [ "$PLATFORM" == "web" ]; then
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release dlink_enabled=yes
