@@ -44,9 +44,9 @@ elif [ "$PLATFORM" == "linuxbsd" ]; then
   
   mv bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
   #mv bin/godot.linuxbsd.template_debug.x86_64 $BIN_DIR/linux_debug.x86_64
-  
+  ls -la $BIN_DIR
   strip $BIN_DIR/linux*
-  
+  ls -la $BIN_DIR
 elif [ "$PLATFORM" == "web" ]; then
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release dlink_enabled=yes
