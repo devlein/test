@@ -1,5 +1,7 @@
 FROM fedora:36
 
+WORKDIR /github/workspace
+
 CMD /bin/bash
 
 RUN dnf -y -q install --setopt=install_weak_deps=False \
