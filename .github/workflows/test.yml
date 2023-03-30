@@ -9,6 +9,9 @@ env:
 jobs:
   Build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: /godot
     continue-on-error: true
     strategy:
       fail-fast: false
@@ -30,8 +33,8 @@ jobs:
       run: |
         mkdir source templates .scons-cache .docker-cache
         wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
-        tar xf godot.tar.gz --directory source/ --strip-components=1 --exclude=".*"
-        rm -rf godot.tar.gz && rm -rf source/editor && rm -rf source/tests
+        tar xf godot.tar.gz --directory source --strip-components=1 --exclude=".*"
+        rm -rf godot.tar.gz source/editor source/tests
         chmod 744 .github/docker/build.sh
     
     - name: Setup Docker Cache
@@ -50,7 +53,7 @@ jobs:
           then
               docker load -i .docker-cache/snapshot.tar
           else
-              docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
+              docker build -t container -f ${{ github.workspace }}/.github/docker/Dockerfile.${{matrix.name}} .
               docker save container -o .docker-cache/snapshot.tar
           fi
     
@@ -62,12 +65,12 @@ jobs:
         restore-keys: sconscache-${{matrix.name}}
     
     - name: Run Docker Image
-      run: docker run -v "${{github.workspace}}":"/github/workspace" container bla ${{env.SECRET_KEY}}
+      run: docker run -v "${{github.workspace}}":"/godot" container bla ${{env.SECRET_KEY}}
     
     - name: Cleanup
       run: |
-        ls -la templates
-        ls -la 
+        ls -la .templates
+        ls -la /godot
     
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
