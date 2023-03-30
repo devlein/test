@@ -1,14 +1,13 @@
 FROM fedora:36
 
-CMD /bin/bash
-
 WORKDIR /root
 
 ENV GODOT_SDK_LINUX_X86_64=/root/x86_64-godot-linux-gnu_sdk-buildroot
 ENV GODOT_SDK_LINUX_X86=/root/i686-godot-linux-gnu_sdk-buildroot
 ENV GODOT_SDK_LINUX_ARMHF=/root/arm-godot-linux-gnueabihf_sdk-buildroot
-#ENV BASE_PATH=/github/workspace
 ENV BASE_PATH=${PATH}
+
+CMD /bin/bash
 
 RUN dnf -y install --setopt=install_weak_deps=False \
     bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz \
