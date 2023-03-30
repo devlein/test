@@ -16,7 +16,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        name: ["windows"]
+        name: ["windows", "linuxbsd"]
 
     steps:
       - name: Checkout
@@ -50,7 +50,7 @@ jobs:
           echo "${{ vars[format('{0}_FEATURE_PROFILE', github.event.inputs.profile)] }}" >> feature_profile.build
 
       - name: Run Docker Image
-        run: docker run -v "${{github.workspace}}":"/github/workspace" --workdir="/github/workspace" container ${{matrix.name}} ${{env.SECRET_KEY}} 
+        run: docker run -v "${{github.workspace}}":"/github/workspace" container ${{matrix.name}} ${{env.SECRET_KEY}} 
 
       - name: Prepare Artifact
         continue-on-error: true
