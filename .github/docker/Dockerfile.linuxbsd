@@ -5,10 +5,8 @@ ENV GODOT_SDK_LINUX_X86=/root/i686-godot-linux-gnu_sdk-buildroot
 ENV GODOT_SDK_LINUX_ARMHF=/root/arm-godot-linux-gnueabihf_sdk-buildroot
 ENV BASE_PATH=/github/workspace
 
-RUN dnf -y -q install --setopt=install_weak_deps=False bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz libxcrypt-compat yasm
+RUN dnf -y -q install --setopt=install_weak_deps=False bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz libxcrypt-compat yasm  build-essential pkg-config libx11-dev libxcursor-dev libxinerama-dev libgl1-mesa-dev libglu-dev libasound2-dev libpulse-dev libudev-dev libxi-dev libxrandr-dev
 RUN pip install scons==4.4.0
-
-RUN dnf -y -q install --setopt=install_weak_deps=False build-essential pkg-config libx11-dev libxcursor-dev libxinerama-dev libgl1-mesa-dev libglu-dev libasound2-dev libpulse-dev libudev-dev libxi-dev libxrandr-dev
 
 CMD /bin/bash
 
