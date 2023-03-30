@@ -14,7 +14,7 @@ jobs:
     strategy:
       max-parallel: 5
       matrix:
-        name: ["windwos", "linuxbsd", "web", "android"]
+        name: ["windows", "linuxbsd", "web", "android"]
         
     steps:
     - name: Checkout
