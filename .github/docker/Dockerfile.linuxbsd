@@ -7,8 +7,6 @@ ENV GODOT_SDK_LINUX_X86=/root/i686-godot-linux-gnu_sdk-buildroot
 ENV GODOT_SDK_LINUX_ARMHF=/root/arm-godot-linux-gnueabihf_sdk-buildroot
 ENV BASE_PATH=${PATH}
 
-CMD /bin/bash
-
 RUN dnf -y install --setopt=install_weak_deps=False \
     bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz \
     libxcrypt-compat yasm gettext
@@ -35,6 +33,9 @@ RUN curl -LO https://downloads.tuxfamily.org/godotengine/toolchains/linux/2021-0
     rm -f bin/{aclocal*,auto*,libtool*,m4}
 
 RUN pip install scons==4.4.0
+
+
+CMD /bin/bash
 
 COPY .github/docker/build.sh /build.sh
 
