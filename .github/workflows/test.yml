@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /godot
+        working-directory: godot
     continue-on-error: true
     strategy:
       fail-fast: false
@@ -65,7 +65,7 @@ jobs:
         restore-keys: sconscache-${{matrix.name}}
     
     - name: Run Docker Image
-      run: docker run -v "${{github.workspace}}":"/godot" container bla ${{env.SECRET_KEY}}
+      run: docker run -v "${{github.workspace}}./github/godot":"/godot/templates" container bla ${{env.SECRET_KEY}}
     
     - name: Cleanup
       run: |
