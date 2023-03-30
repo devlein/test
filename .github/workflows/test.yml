@@ -7,7 +7,7 @@ env:
   SCONSCACHE: ${{github.workspace}}/.scons-cache/
   DOCKERCACHE: .docker-cache
   SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
-    
+  
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -15,14 +15,14 @@ jobs:
       max-parallel: 5
       matrix:
         name: ["windows", "linuxbsd", "web", "android"]
-        
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
+    
     - name: Prepare Evnviroment
       run: |
-        mkdir bin source .scons-cache .docker-cache
+        mkdir source templates .scons-cache .docker-cache
         wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
         tar xf godot.tar.gz --directory source/ --strip-components=1 --exclude=".*"
         rm -rf godot.tar.gz && rm -rf source/editor && rm -rf source/tests
@@ -38,18 +38,15 @@ jobs:
         key: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
         restore-keys: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
     
-    - name: Load Docker Snapshot
-      if: steps.docker-cache.outputs.cache-hit == 'true'
-      run: docker load -i .docker-cache/snapshot.tar
-    
-    - name: Create Docker Image
-      if: steps.docker-cache.outputs.cache-hit != 'true'
+    - name: Create Docker Container
       run: |
-        docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
-        docker save container -o .docker-cache/snapshot.tar
-    
-    - name: Run Docker Image
-      run: docker run -v "${{github.workspace}}":"/github/workspace" container bla ${{env.SECRET_KEY}} 
+          if [ -e .docker-cache/snapshot.tar ]
+          then
+              docker load -i .docker-cache/snapshot.tar
+          else
+              docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
+              docker save container -o .docker-cache/snapshot.tar
+          fi
     
     - name: Setup build cache
       if: false
@@ -58,5 +55,20 @@ jobs:
         path: ${{env.SCONSCACHE}}
         key: sconscache-${{matrix.name}}
         restore-keys: sconscache-${{matrix.name}}
-        
-        
+    
+    - name: Run Docker Image
+      run: docker run -v "${{github.workspace}}":"/github/workspace" container bla ${{env.SECRET_KEY}}
+    
+    - name: Prepare Artifact
+      continue-on-error: true
+      run: |
+        ls -la templates
+        ls -la 
+    
+    - name: Upload Artifact
+      continue-on-error: true
+      uses: actions/upload-artifact@v3
+      with:
+        name: templates
+        path: bin/*
+        retention-days: 3
