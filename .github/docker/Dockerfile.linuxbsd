@@ -15,14 +15,14 @@ RUN cd /root && \
     rm -f x86_64-godot-linux-gnu_sdk-buildroot.tar.bz2 && \
     cd x86_64-godot-linux-gnu_sdk-buildroot && \
     ./relocate-sdk.sh && \
-    rm -f bin/{aclocal*,auto*,libtool*,m4} && \
+    rm -f bin/{aclocal*,auto*,libtool*,m4}
 RUN cd /root && \
     curl -LO https://downloads.tuxfamily.org/godotengine/toolchains/linux/2021-02-11/arm-godot-linux-gnueabihf_sdk-buildroot.tar.bz2 && \
     tar xf arm-godot-linux-gnueabihf_sdk-buildroot.tar.bz2 && \
     rm -f arm-godot-linux-gnueabihf_sdk-buildroot.tar.bz2 && \
     cd arm-godot-linux-gnueabihf_sdk-buildroot && \
     ./relocate-sdk.sh && \
-    rm -f bin/{aclocal*,auto*,libtool*,m4} && \
+    rm -f bin/{aclocal*,auto*,libtool*,m4}
 RUN cd /root && \
     curl -LO https://downloads.tuxfamily.org/godotengine/toolchains/linux/2021-02-11/i686-godot-linux-gnu_sdk-buildroot.tar.bz2 && \
     tar xf i686-godot-linux-gnu_sdk-buildroot.tar.bz2 && \
