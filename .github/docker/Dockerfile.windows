@@ -1,11 +1,12 @@
-FROM fedora:37
-
-RUN dnf -y install --setopt=install_weak_deps=False bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz binutils gettext gcc g++
-RUN pip install scons
-
-RUN dnf -y install --setopt=install_weak_deps=False mingw32-gcc mingw32-gcc-c++ mingw32-winpthreads-static mingw64-gcc mingw64-gcc-c++ mingw64-winpthreads-static
+FROM fedora:36
 
 CMD /bin/bash
+
+RUN dnf -y -q install --setopt=install_weak_deps=False \
+  bash bzip2 curl file findutils git make nano patch pkgconfig python3-pip unzip which xz binutils \
+  mingw32-gcc mingw32-gcc-c++ mingw32-winpthreads-static mingw64-gcc mingw64-gcc-c++ mingw64-winpthreads-static
+
+RUN pip install scons
 
 COPY .github/docker/build.sh /build.sh
 
