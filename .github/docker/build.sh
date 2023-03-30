@@ -9,7 +9,7 @@ export TERM=xterm
 
 echo Building $PLATFORM
 
-
+ls -la
 
 mkdir -p $BIN_DIR
 mkdir -p $SCONS_CACHE
@@ -39,9 +39,9 @@ rm -rf editor
   ls -la $BIN_DIR
 elif [ "$PLATFORM" == "linuxbsd" ]; then
 
-  ls-la
+  ls -la
   wget -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/4.0.1-stable.tar.gz
-  ls-la
+  ls -la
   tar xf /root/godot.tar.gz --strip-components=1
   
   sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
