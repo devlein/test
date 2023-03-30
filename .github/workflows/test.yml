@@ -1,25 +1,62 @@
 name: 🛠️ Godot Build Service
 on: 
-    workflow_dispatch:
+  workflow_dispatch:
 
 env:
-    version: "4.0.1"
+  version: "4.0.1"
+  SCONSCACHE: ${{github.workspace}}/.scons-cache/
+  DOCKERCACHE: ${{github.workspace}}/.docker-cache/
+  SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
     
 jobs:
-    Build:
-        runs-on: ubuntu-latest
+  Build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 5
+      matrix:
+        name: ["windwos", "linuxbsd", "web", "android"]
+        
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
 
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v3
-
-          - name: Download and extract Godot
-            run: |
-                mkdir -p source
-                wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
-                tar xf godot.tar.gz --directory source/ --strip-components=1 --exclude=".*"
-                rm -rf godot.tar.gz && rm -rf source/editor
-                ls -la
-                ls -la source
-  
-  
+    - name: Prepare Evnviroment
+      run: |
+        mkdir -p bin && mkdir -p source
+        wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
+        tar xf godot.tar.gz --directory source/ --strip-components=1 --exclude=".*"
+        rm -rf godot.tar.gz && rm -rf source/editor && rm -rf source/tests
+        chmod 744 .github/docker/build.sh
+    
+    - name: Setp Up Docker Cache
+      id: docker-cache
+      uses: actions/cache@v3
+      env:
+        dockerfile: .github/docker/Dockerfile.${{matrix.name}}
+      with:
+        path: ${{env.SCONSCACHE}}
+        key: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
+        restore-keys: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
+    
+    - name: Load Docker Snapshot
+      if: steps.docker-cache.outputs.cache-hit == 'true'
+      run: docker load -i ${{DOCKERCACHE}}snapshot.tar
+    
+    - name: Create Docker Image
+      if: steps.docker-cache.outputs.cache-hit != 'true'
+      run: |
+        docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
+        docker save container -o ${{DOCKERCACHE}}snapshot.tar
+    
+    - name: Run Docker Image
+      run: docker run -v "${{github.workspace}}":"/github/workspace" container bla ${{env.SECRET_KEY}} 
+    
+    - name: Setup build cache
+      if: false
+      uses: actions/cache@v3
+      with:
+        path: ${{env.SCONSCACHE}}
+        key: sconscache-${{matrix.name}}
+        restore-keys: sconscache-${{matrix.name}}
+        
+        
