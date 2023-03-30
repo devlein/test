@@ -33,7 +33,7 @@ if [ "$PLATFORM" == "windows" ]; then
   #mv bin/godot.windows.template_debug.x86_64.exe $BIN_DIR/windows_debug_x86_64.exe
   #mv bin/godot.windows.template_debug.x86_64.console.exe $BIN_DIR/windows_debug_x86_64_console.exe
   
-  strip $BIN_DIR/windows*.exe
+  strip --strip-all $BIN_DIR/windows*.exe
   
 elif [ "$PLATFORM" == "linuxbsd" ]; then
   #sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
