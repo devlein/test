@@ -30,13 +30,11 @@ rm -rf editor
   mv bin/godot.windows.template_release.x86_64.exe $BIN_DIR/windows_release_x86_64.exe
   mv bin/godot.windows.template_release.x86_64.console.exe $BIN_DIR/windows_release_x86_64_console.exe
   
-  #scons platform=windows  arch=x86_64 use_mingw=yes target=template_debug
-  #mv bin/godot.windows.template_debug.x86_64.exe $BIN_DIR/windows_debug_x86_64.exe
-  #mv bin/godot.windows.template_debug.x86_64.console.exe $BIN_DIR/windows_debug_x86_64_console.exe
+  scons platform=windows  arch=x86_64 use_mingw=yes target=template_debug
+  mv bin/godot.windows.template_debug.x86_64.exe $BIN_DIR/windows_debug_x86_64.exe
+  mv bin/godot.windows.template_debug.x86_64.console.exe $BIN_DIR/windows_debug_x86_64_console.exe
   
-  ls -la $BIN_DIR
   strip --strip-all $BIN_DIR/windows*.exe
-  ls -la $BIN_DIR
 elif [ "$PLATFORM" == "linuxbsd" ]; then
 
   cp /github/workspace/godot.tar.gz /root/godot.tar.gz
@@ -46,14 +44,12 @@ elif [ "$PLATFORM" == "linuxbsd" ]; then
   sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
   export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
   scons platform=linuxbsd arch=x86_64 lto=full ${SCONS_FLAGS} target=template_release
-  #scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64 target=template_debug
+  scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64 target=template_debug
   
-  #mv bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
+  mv bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
   cp bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
-  #mv bin/godot.linuxbsd.template_debug.x86_64 $BIN_DIR/linux_debug.x86_64
-  #ls -la $BIN_DIR
-  #strip $BIN_DIR/linux*
-  #ls -la $BIN_DIR
+  mv bin/godot.linuxbsd.template_debug.x86_64 $BIN_DIR/linux_debug.x86_64
+  strip $BIN_DIR/linux*
 elif [ "$PLATFORM" == "web" ]; then
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release dlink_enabled=yes
