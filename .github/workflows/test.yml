@@ -5,7 +5,7 @@ on:
 env:
   version: "4.0.1"
   SCONSCACHE: ${{github.workspace}}/.scons-cache/
-  DOCKERCACHE: ${{github.workspace}}/.docker-cache/
+  DOCKERCACHE: .docker-cache
   SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
     
 jobs:
@@ -34,19 +34,19 @@ jobs:
       env:
         dockerfile: .github/docker/Dockerfile.${{matrix.name}}
       with:
-        path: ${{env.SCONSCACHE}}
+        path: .docker-cache
         key: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
         restore-keys: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
     
     - name: Load Docker Snapshot
       if: steps.docker-cache.outputs.cache-hit == 'true'
-      run: docker load -i ${{DOCKERCACHE}}snapshot.tar
+      run: docker load -i .docker-cache/snapshot.tar
     
     - name: Create Docker Image
       if: steps.docker-cache.outputs.cache-hit != 'true'
       run: |
         docker build -t container -f ./.github/docker/Dockerfile.${{matrix.name}} .
-        docker save container -o ${{DOCKERCACHE}}snapshot.tar
+        docker save container -o .docker-cache/snapshot.tar
     
     - name: Run Docker Image
       run: docker run -v "${{github.workspace}}":"/github/workspace" container bla ${{env.SECRET_KEY}} 
