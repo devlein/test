@@ -35,11 +35,11 @@ elif [ "$PLATFORM" == "linuxbsd" ]; then
   #sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
   #export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
   
-  scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64 target=template_release
-  scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64 target=template_debug
+  scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64  lto=full target=template_release
+  #scons platform=linuxbsd ${SCONS_FLAGS} arch=x86_64 target=template_debug
   
   mv bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
-  mv bin/godot.linuxbsd.template_debug.x86_64 $BIN_DIR/linux_debug.x86_64
+  #mv bin/godot.linuxbsd.template_debug.x86_64 $BIN_DIR/linux_debug.x86_64
   
   strip $BIN_DIR/linux*
   
