@@ -48,7 +48,7 @@ jobs:
         env:
           SCONS_CACHE: ${{ github.workspace }}/.scons-cache/
           SCONS_CACHE_LIMIT: 512
-        run: scons platform=windows target=template_release arch=x86_64 use_mingw=yes lto=full ${{env.SCONSFILES}}
+        run: scons platform=windows target=template_release arch=x86_64 use_mingw=yes lto=full ${{env.SCONSFLAGS}} ${{env.SCONSFILES}}
 
       - name: Prepare Artifact
         run: |
