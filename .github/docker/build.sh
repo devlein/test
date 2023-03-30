@@ -39,8 +39,7 @@ rm -rf editor
   ls -la $BIN_DIR
 elif [ "$PLATFORM" == "linuxbsd" ]; then
 
-  ls -la
-  wget -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/4.0.1-stable.tar.gz
+  cp /github/workspace/godot.tar.gz /root/godot.tar.gz
   ls -la
   tar xf /root/godot.tar.gz --strip-components=1
   
