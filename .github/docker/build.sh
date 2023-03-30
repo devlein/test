@@ -2,7 +2,7 @@
 
 PLATFORM=$1
 KEY=$2
-SCONS_FLAGS=warnings=no progress=no productions=yes profile=custom.py build_feature_profile=feature_profile.build
+SCONS_FLAGS=warnings=no werror=no progress=no productions=yes profile=custom.py build_feature_profile=feature_profile.build
 SCONS_CACHE=/github/workspace/.scons-cache/
 BIN_DIR=/github/workspace/bin
 export TERM=xterm
@@ -33,8 +33,9 @@ if [ "$PLATFORM" == "windows" ]; then
   #mv bin/godot.windows.template_debug.x86_64.exe $BIN_DIR/windows_debug_x86_64.exe
   #mv bin/godot.windows.template_debug.x86_64.console.exe $BIN_DIR/windows_debug_x86_64_console.exe
   
+  ls -la $BIN_DIR
   strip --strip-all $BIN_DIR/windows*.exe
-  
+  ls -la $BIN_DIR
 elif [ "$PLATFORM" == "linuxbsd" ]; then
   #sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
   #export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
