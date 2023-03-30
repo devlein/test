@@ -32,6 +32,9 @@ if [ "$PLATFORM" == "windows" ]; then
   strip $BIN_DIR/windows*.exe
   
 elif [ "$PLATFORM" == "linuxbsd" ]; then
+  ls -la 
+  ls -la /root
+  ls -la ${GODOT_SDK_LINUX_X86_64}
   sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
   export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
   
