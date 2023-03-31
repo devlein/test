@@ -3,16 +3,13 @@
 PLATFORM=$1
 KEY=$2
 SCONS_FLAGS=productions=yes profile=custom.py build_feature_profile=feature_profile.build 
-SCONS_CACHE=/github/workspace/.scons-cache/
-BIN_DIR=/github/workspace/bin
+SCONS_CACHE=/github/workspace/.godot/.scons-cache/
+BIN_DIR=/godot/templates
 export TERM=xterm
 
 echo Building $PLATFORM
 
 ls -la
-
-mkdir -p $BIN_DIR
-mkdir -p $SCONS_CACHE
 
 export SCONS_CACHE=$SCONS_CACHE
 if [ ${#KEY} -ge 5 ]; then
@@ -20,12 +17,7 @@ if [ ${#KEY} -ge 5 ]; then
 fi
 
 if [ "$PLATFORM" == "windows" ]; then
-cd godot-4.0
-rm -rf editor
-  gcc -v
-  ld -v
-  python -c "import sys; print(sys.version)"
-  scons --version
+  cd /godot/source
   scons platform=windows arch=x86_64 lto=full use_mingw=yes ${SCONS_FLAGS} target=template_release
   mv bin/godot.windows.template_release.x86_64.exe $BIN_DIR/windows_release_x86_64.exe
   mv bin/godot.windows.template_release.x86_64.console.exe $BIN_DIR/windows_release_x86_64_console.exe
