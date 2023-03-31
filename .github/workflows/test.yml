@@ -27,7 +27,7 @@ jobs:
     
     - name: Prepare Enviroment
       run: |
-        mkdir .godot/source .godot/templates .godot/.scons-cache .godot/.docker-cache
+        mkdir -p .godot/source .godot/templates .godot/.scons-cache .godot/.docker-cache
         chmod 744 .github/docker/build.sh
         wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
         tar xf godot.tar.gz --directory .godot/source --strip-components=1 --exclude=".*"
@@ -45,32 +45,32 @@ jobs:
     
     - name: Create Docker Container
       run: |
-          if [ -e godot/.docker-cache/snapshot.tar ]
+          if [ -e .godot/.docker-cache/snapshot.tar ]
           then
-              docker load -i godot/.docker-cache/snapshot.tar
+              docker load -i .godot/.docker-cache/snapshot.tar
           else
               docker build -t container -f ${{ github.workspace }}/.github/docker/Dockerfile.${{matrix.name}} .
-              docker save container -o godot/.docker-cache/snapshot.tar
+              docker save container -o .godot/.docker-cache/snapshot.tar
           fi
     
     - name: Setup Build Cache
       uses: actions/cache@v3
       with:
-        path: godot/.scons-cache
+        path: .godot/.scons-cache
         key: sconscache-${{matrix.name}}
         restore-keys: sconscache-${{matrix.name}}
     
     - name: Run Docker Image
-      run: docker run -v "${{github.workspace}}./github/godot":"/godot" container bla ${{env.SECRET_KEY}}
+      run: docker run -v "${{github.workspace}}./github/.godot":"/godot" container bla ${{env.SECRET_KEY}}
     
     - name: Cleanup
       run: |
-        ls -la godot/.templates
-        ls -la godot
+        ls -la .godot/.templates
+        ls -la .godot
     
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
         name: templates
-        path: godot/templates/*
+        path: .godot/templates/*
         retention-days: 3
