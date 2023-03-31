@@ -74,4 +74,5 @@ elif [ "$PLATFORM" == "android" ]; then
   mv bin/godot-lib.template_release.aar $BIN_DIR/
 else
   echo hmm
+  ls -la /godot
 fi
