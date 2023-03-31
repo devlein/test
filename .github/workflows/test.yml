@@ -16,11 +16,11 @@ jobs:
         #name: ["windows", "linuxbsd", "web", "android"]
         #arch: ["x86_64", "i686"]
         name: ["windows"]
-        exclude:
-          - name: web
-            arch: "i686"
-          - name: android
-            arch: "i686"
+        #exclude:
+        #  - name: web
+        #    arch: "i686"
+        #  - name: android
+        #    arch: "i686"
     
     steps:
     - name: Checkout Repository
