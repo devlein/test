@@ -57,11 +57,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .godot/.scons-cache
-        key: sconscache-${{matrix.name}}
-        restore-keys: sconscache-${{matrix.name}}
+        key: sconscache-${{matrix.name}}-${{matrix.arc}}}-${{hashFiles(".github/godot")}}
+        restore-keys: sconscache-${{matrix.name}}-${{matrix.arc}}}-${{hashFiles(".github/godot")}}
     
     - name: Run Docker Image
-      run: docker run -v "${{github.workspace}}./github/.godot":"/godot" container bla ${{env.SECRET_KEY}}
+      run: docker run -v "${{github.workspace}}./github/.godot":"/godot" container ${{matrix.name}} ${{env.SECRET_KEY}}
     
     - name: Cleanup
       run: |
