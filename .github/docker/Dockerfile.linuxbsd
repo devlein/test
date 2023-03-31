@@ -34,9 +34,6 @@ RUN curl -LO https://downloads.tuxfamily.org/godotengine/toolchains/linux/2021-0
 
 RUN pip install scons==4.4.0
 
-
-CMD /bin/bash
-
 COPY .github/docker/build.sh /build.sh
 
 ENTRYPOINT ["/build.sh"]
