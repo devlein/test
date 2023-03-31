@@ -64,7 +64,7 @@ jobs:
     - name: Run Docker Image
       run: |
         ls -la .godot
-        docker run -v "${{github.workspace}}/.godot":"/godot" container matrix.name ${{env.SECRET_KEY}}
+        docker run -v "${{github.workspace}}/.godot":"/godot" container ${{matrix.name}} ${{env.SECRET_KEY}}
     
     - name: Cleanup
       run: |
