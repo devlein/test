@@ -62,7 +62,9 @@ jobs:
         restore-keys: sconscache-${{matrix.name}}-${{matrix.arc}}}-${{hashFiles('.github/godot')}}
     
     - name: Run Docker Image
-      run: docker run -v "${{github.workspace}}./github/.godot":"/godot" container ${{matrix.name}} ${{env.SECRET_KEY}}
+      run: |
+        ls -la ${{github.workspace}}./github/.godot
+        docker run -v "${{github.workspace}}./github/.godot":"/godot" container ${{matrix.name}} ${{env.SECRET_KEY}}
     
     - name: Cleanup
       run: |
