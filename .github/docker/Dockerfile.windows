@@ -8,8 +8,6 @@ RUN dnf -y -q install --setopt=install_weak_deps=False \
 
 RUN pip install scons
 
-CMD /bin/bash
-
 COPY .github/docker/build.sh /build.sh
 
 ENTRYPOINT ["/build.sh"]
