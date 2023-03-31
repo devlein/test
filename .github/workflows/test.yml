@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  VERSION: "4.0.1"
+  VERSION: ${{vars.VERSION}}
   SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
   
 jobs:
