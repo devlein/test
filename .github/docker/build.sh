@@ -5,7 +5,7 @@ KEY=$2
 SCONS_FLAGS=productions=yes lto=full profile=custom.py build_feature_profile=feature_profile.build 
 BIN_DIR=/godot/templates
 
-export SCONS_CACHE=/godot/.scons-cache/
+export SCONS_CACHE=/godot/.scons-cache
 if [ ${#KEY} -ge 1 ]; then
   export SCRIPT_AES256_ENCRYPTION_KEY=$KEY
 fi
