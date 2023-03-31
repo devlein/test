@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  version: "4.0.1"
+  VERSION: "4.0.1"
   SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
   
 jobs:
@@ -13,14 +13,14 @@ jobs:
       fail-fast: false
       max-parallel: 10
       matrix:
-        #name: ["windows", "linuxbsd", "web", "android"]
-        #arch: ["x86_64", "i686"]
-        name: ["web"]
-        #exclude:
-        #  - name: web
-        #    arch: "i686"
-        #  - name: android
-        #    arch: "i686"
+        name: ["windows", "linuxbsd", "web", "android"]
+        arch: ["x86_64", "i686"]
+        #name: ["web"]
+        exclude:
+          - name: web
+            arch: "i686"
+          - name: android
+            arch: "i686"
     
     steps:
     - name: Checkout Repository
@@ -30,19 +30,17 @@ jobs:
       run: |
         mkdir -p .godot .godot/source .godot/templates .godot/.scons-cache .godot/.docker-cache
         chmod 744 .github/docker/build.sh
-        wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
+        wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.VERSION}}-stable.tar.gz
         tar xf godot.tar.gz --directory .godot/source --strip-components=1 --exclude=".*"
         rm -rf godot.tar.gz .godot/source/editor .godot/source/tests
     
     - name: Setup Docker Cache
       id: docker-cache
       uses: actions/cache@v3
-      env:
-        dockerfile: .github/docker/Dockerfile.${{matrix.name}}
       with:
         path: .godot/.docker-cache
-        key: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
-        restore-keys: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
+        key: docker-${{matrix.name}}
+        restore-keys: docker-${{matrix.name}}
     
     - name: Create Docker Container
       run: |
@@ -50,7 +48,7 @@ jobs:
           then
               docker load -i .godot/.docker-cache/snapshot.tar
           else
-              docker build -t container -f ${{ github.workspace }}/.github/docker/Dockerfile.${{matrix.name}} .
+              docker build -t container -f ${{github.workspace}}/.github/docker/Dockerfile.${{matrix.name}} .
               docker save container -o .godot/.docker-cache/snapshot.tar
           fi
     
@@ -58,18 +56,12 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .godot/.scons-cache
-        key: sconscache-${{matrix.name}}-${{matrix.arc}}}-${{hashFiles('.github/godot')}}
-        restore-keys: sconscache-${{matrix.name}}-${{matrix.arc}}}-${{hashFiles('.github/godot')}}
+        key: sconscache-${{matrix.name}}-${{matrix.arc}}}
+        restore-keys: sconscache-${{matrix.name}}-${{matrix.arc}}}
     
     - name: Run Docker Image
       run: |
-        ls -la .godot
-        docker run -v "${{github.workspace}}/.godot":"/godot" container ${{matrix.name}} ${{env.SECRET_KEY}}
-    
-    - name: Cleanup
-      run: |
-        ls -la .godot/templates
-        ls -la .godot
+        docker run -v "${{github.workspace}}/.godot":"/godot" container ${{matrix.arch}} ${{env.SECRET_KEY}}
     
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
