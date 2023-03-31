@@ -11,9 +11,9 @@ if [ ${#KEY} -ge 5 ]; then
 fi
 
 echo Building $PLATFORM
-
+cd /godot/source
+  
 if [ "$PLATFORM" == "windows" ]; then
-  cd /godot/source
   scons platform=windows arch=x86_64 lto=full use_mingw=yes ${SCONS_FLAGS} target=template_release
   scons platform=windows arch=x86_64 lto=full use_mingw=yes ${SCONS_FLAGS} target=template_debug
   
