@@ -14,13 +14,6 @@ jobs:
       max-parallel: 10
       matrix:
         name: ["windows", "linuxbsd", "web", "android"]
-        arch: ["x86_64", "x86_32"]
-        #name: ["web"]
-        exclude:
-          - name: web
-            arch: "x86_64"
-          - name: android
-            arch: "x86_64"
     
     steps:
     - name: Checkout Repository
@@ -44,8 +37,7 @@ jobs:
     
     - name: Create Docker Container
       run: |
-          if [ -e .godot/.docker-cache/snapshot.tar ]
-          then
+          if [ -e .godot/.docker-cache/snapshot.tar ]; then
               docker load -i .godot/.docker-cache/snapshot.tar
           else
               docker build -t container -f ${{github.workspace}}/.github/docker/Dockerfile.${{matrix.name}} .
@@ -56,12 +48,12 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .godot/.scons-cache
-        key: sconscache-${{matrix.name}}-${{matrix.arc}}}
-        restore-keys: sconscache-${{matrix.name}}-${{matrix.arc}}}
+        key: sconscache-${{matrix.name}}
+        restore-keys: sconscache-${{matrix.name}}
     
     - name: Run Docker Image
       run: |
-        docker run -v "${{github.workspace}}/.godot":"/godot" container ${{matrix.arch}} ${{env.SECRET_KEY}}
+        docker run -v "${{github.workspace}}/.godot":"/godot" container ${{env.SECRET_KEY}}
     
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
