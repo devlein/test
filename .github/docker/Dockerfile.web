@@ -12,7 +12,6 @@ RUN pip install scons==4.4.0
 RUN git clone --branch ${EMSCRIPTEN_VERSION} --progress https://github.com/emscripten-core/emsdk && \
     emsdk/emsdk install ${EMSCRIPTEN_VERSION} && \
     emsdk/emsdk activate ${EMSCRIPTEN_VERSION} && echo 'source "/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
-CMD /bin/bash
 
 COPY .github/docker/build.sh /build.sh
 
