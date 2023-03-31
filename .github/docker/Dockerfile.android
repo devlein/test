@@ -20,8 +20,6 @@ RUN mkdir -p sdk && cd sdk && \
     yes | cmdline-tools/bin/sdkmanager --sdk_root="${ANDROID_SDK_ROOT}" --licenses && \
     cmdline-tools/bin/sdkmanager --sdk_root="${ANDROID_SDK_ROOT}" "ndk;${ANDROID_NDK_VERSION}" 'cmdline-tools;latest' 'build-tools;32.0.0' 'platforms;android-32' 'cmake;3.18.1'
 
-CMD /bin/bash
-
 COPY .github/docker/build.sh /build.sh
 
 ENTRYPOINT ["/build.sh"]
