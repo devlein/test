@@ -3,13 +3,12 @@
 KEY=$1
 SCONS_FLAGS=productions=yes lto=full profile=custom.py build_feature_profile=feature_profile.build 
 BIN_DIR=/godot/templates
-echo key: ${KEY} - ${#KEY}
+
 export SCONS_CACHE=/godot/.scons-cache
 if [ ${#KEY} -ge 1 ]; then
   export SCRIPT_AES256_ENCRYPTION_KEY=$KEY
 fi
 
-echo Building $PLATFORM
 cd /godot/source
   
 if [ "$PLATFORM" == "windows" ]; then
