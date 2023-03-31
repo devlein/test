@@ -28,15 +28,11 @@ jobs:
     
     - name: Prepare Enviroment
       run: |
-        pwd
-        ls -la
         mkdir -p .godot .godot/source .godot/templates .godot/.scons-cache .godot/.docker-cache
         chmod 744 .github/docker/build.sh
         wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
         tar xf godot.tar.gz --directory .godot/source --strip-components=1 --exclude=".*"
         rm -rf godot.tar.gz .godot/source/editor .godot/source/tests
-        ls -la
-        ls -la .godot/
     
     - name: Setup Docker Cache
       id: docker-cache
@@ -67,8 +63,8 @@ jobs:
     
     - name: Run Docker Image
       run: |
-        ls -la ${{github.workspace}}/.github/.godot
-        docker run -v "${{github.workspace}}/.github/.godot":"/godot" container matrix.name ${{env.SECRET_KEY}}
+        ls -la .godot
+        docker run -v ".godot":"/godot" container matrix.name ${{env.SECRET_KEY}}
     
     - name: Cleanup
       run: |
