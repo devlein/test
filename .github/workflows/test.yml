@@ -39,7 +39,7 @@ jobs:
       env:
         dockerfile: .github/docker/Dockerfile.${{matrix.name}}
       with:
-        path: .docker-cache
+        path: .godot/.docker-cache
         key: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
         restore-keys: docker-${{matrix.name}}-${{hashFiles(env.dockerfile)}}
     
@@ -65,7 +65,7 @@ jobs:
     
     - name: Cleanup
       run: |
-        ls -la .godot/.templates
+        ls -la .godot/templates
         ls -la .godot
     
     - name: Upload Artifact
