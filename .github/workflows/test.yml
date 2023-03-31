@@ -2,10 +2,6 @@ name: 🛠️ Godot Build Service
 on: 
   workflow_dispatch:
 
-env:
-  VERSION: ${{vars.VERSION}}
-  SECRET_KEY: ${{ secrets[format('{0}_KEY', github.event.inputs.profile)] }}
-  
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -23,7 +19,7 @@ jobs:
       run: |
         mkdir -p .godot .godot/source .godot/templates .godot/.scons-cache .godot/.docker-cache
         chmod 744 .github/docker/build.sh
-        wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.VERSION}}-stable.tar.gz
+        wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{vars.VERSION}}-stable.tar.gz
         tar xf godot.tar.gz --directory .godot/source --strip-components=1 --exclude=".*"
         rm -rf godot.tar.gz .godot/source/editor .godot/source/tests
     
@@ -53,7 +49,7 @@ jobs:
     
     - name: Run Docker Image
       run: |
-        docker run -v "${{github.workspace}}/.godot":"/godot" container ${{env.SECRET_KEY}}
+        docker run -v "${{github.workspace}}/.godot":"/godot" container ${{secrets.SECRET_KEY}}
     
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
