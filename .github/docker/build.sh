@@ -37,7 +37,7 @@ elif [ "$PLATFORM" == "linuxbsd" ]; then
   strip --strip-all $BIN_DIR/linux*
   
 elif [ "$PLATFORM" == "web" ]; then
-  source /root/emsdk/emsdk_env.sh
+  source emsdk/emsdk_env.sh
 
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release dlink_enabled=yes
