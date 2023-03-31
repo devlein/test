@@ -35,7 +35,7 @@ jobs:
         wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/${{env.version}}-stable.tar.gz
         tar xf godot.tar.gz --directory .godot/source --strip-components=1 --exclude=".*"
         rm -rf godot.tar.gz .godot/source/editor .godot/source/tests
-        ls- la
+        ls -la
         ls -la .godot/
     
     - name: Setup Docker Cache
