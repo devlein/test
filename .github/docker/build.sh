@@ -86,8 +86,8 @@ elif [ "$PLATFORM" == "android" ]; then
   
 elif [ "$PLATFORM" == "osx" ]; then
   # https://github.com/godotengine/godot-build-scripts/blob/main/build-macos/
-  
+  ls -la
 elif [ "$PLATFORM" == "ios" ]; then
   # https://github.com/godotengine/godot-build-scripts/tree/main/build-ios/
-  
+  ls -la
 fi
