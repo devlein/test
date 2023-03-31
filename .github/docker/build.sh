@@ -37,6 +37,8 @@ elif [ "$PLATFORM" == "linuxbsd" ]; then
   strip --strip-all $BIN_DIR/linux*
   
 elif [ "$PLATFORM" == "web" ]; then
+  source /root/emsdk/emsdk_env.sh
+
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_release dlink_enabled=yes
   scons platform=web ${SCONS_FLAGS} optimize=size target=template_debug
@@ -65,7 +67,7 @@ elif [ "$PLATFORM" == "android" ]; then
   mv bin/android_source.zip $BIN_DIR/
   mv bin/android_debug.apk $BIN_DIR/
   mv bin/android_release.apk $BIN_DIR/
-  mv bin/godot-lib.template_release.aar $BIN_DIR/
+  #mv bin/godot-lib.template_release.aar $BIN_DIR/
 else
   echo hmm
 fi
