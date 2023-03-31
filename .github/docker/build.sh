@@ -83,4 +83,11 @@ elif [ "$PLATFORM" == "android" ]; then
   mv bin/android_debug.apk $BIN_DIR/
   mv bin/android_release.apk $BIN_DIR/
   #mv bin/godot-lib.template_release.aar $BIN_DIR/
+  
+elif [ "$PLATFORM" == "osx" ]; then
+  # https://github.com/godotengine/godot-build-scripts/blob/main/build-macos/
+  
+elif [ "$PLATFORM" == "ios" ]; then
+  # https://github.com/godotengine/godot-build-scripts/tree/main/build-ios/
+  
 fi
