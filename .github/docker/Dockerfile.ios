@@ -1,6 +1,6 @@
 FROM fedora:36
 
-ENV PLATFORM=osx
+ENV PLATFORM=ios
 
 ENV IOS_SDK=16.1
 ENV OSXCROSS_IOS=not_nothing
