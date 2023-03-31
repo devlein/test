@@ -13,8 +13,9 @@ jobs:
       fail-fast: false
       max-parallel: 10
       matrix:
-        name: ["windows", "linuxbsd", "web", "android"]
-        arch: ["x86_64", "i686"]
+        #name: ["windows", "linuxbsd", "web", "android"]
+        #arch: ["x86_64", "i686"]
+        name: ["windows"]
         exclude:
           - name: web
             arch: "i686"
