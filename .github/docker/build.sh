@@ -1,7 +1,7 @@
 #!/bin/sh -l
 
 KEY=$1
-SCONS_FLAGS=productions=yes lto=full profile=custom.py build_feature_profile=feature_profile.build 
+SCONS_FLAGS=productions=yes profile=custom.py build_feature_profile=feature_profile.build 
 BIN_DIR=/godot/templates
 
 export SCONS_CACHE=/godot/.scons-cache
@@ -12,16 +12,16 @@ fi
 cd /godot/source
   
 if [ "$PLATFORM" == "windows" ]; then
-  scons platform=windows arch=x86_64 use_mingw=yes ${SCONS_FLAGS} target=template_release
-  scons platform=windows arch=x86_64 use_mingw=yes ${SCONS_FLAGS} target=template_debug
+  scons platform=windows arch=x86_64 lto=full use_mingw=yes ${SCONS_FLAGS} target=template_release
+  scons platform=windows arch=x86_64 lto=full use_mingw=yes ${SCONS_FLAGS} target=template_debug
   
   mv bin/godot.windows.template_release.x86_64.exe $BIN_DIR/windows_release_x86_64.exe
   mv bin/godot.windows.template_release.x86_64.console.exe $BIN_DIR/windows_release_x86_64_console.exe
   mv bin/godot.windows.template_debug.x86_64.exe $BIN_DIR/windows_debug_x86_64.exe
   mv bin/godot.windows.template_debug.x86_64.console.exe $BIN_DIR/windows_debug_x86_64_console.exe
   
-  scons platform=windows arch=x86_32 use_mingw=yes ${SCONS_FLAGS} target=template_release
-  scons platform=windows arch=x86_32 use_mingw=yes ${SCONS_FLAGS} target=template_debug
+  scons platform=windows arch=x86_32 lto=full use_mingw=yes ${SCONS_FLAGS} target=template_release
+  scons platform=windows arch=x86_32 lto=full use_mingw=yes ${SCONS_FLAGS} target=template_debug
   
   mv bin/godot.windows.template_release.x86_32.exe $BIN_DIR/windows_release_x86_32.exe
   mv bin/godot.windows.template_release.x86_32.console.exe $BIN_DIR/windows_release_x86_32_console.exe
@@ -34,16 +34,16 @@ elif [ "$PLATFORM" == "linuxbsd" ]; then
   sed -i ${GODOT_SDK_LINUX_X86_64}/x86_64-godot-linux-gnu/sysroot/usr/lib/pkgconfig/dbus-1.pc -e "s@/lib@/lib64@g"
   export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
   
-  scons platform=linuxbsd arch=x86_64 ${SCONS_FLAGS} target=template_release
-  scons platform=linuxbsd arch=x86_64 ${SCONS_FLAGS} target=template_debug
+  scons platform=linuxbsd arch=x86_64 lto=full ${SCONS_FLAGS} target=template_release
+  scons platform=linuxbsd arch=x86_64 lto=full ${SCONS_FLAGS} target=template_debug
   
   mv bin/godot.linuxbsd.template_release.x86_64 $BIN_DIR/linux_release.x86_64
   mv bin/godot.linuxbsd.template_debug.x86_64 $BIN_DIR/linux_debug.x86_64
   
   export PATH="${GODOT_SDK_LINUX_X86}/bin:${BASE_PATH}"
   
-  scons platform=linuxbsd arch=x86_32 ${SCONS_FLAGS} target=template_release
-  scons platform=linuxbsd arch=x86_32 ${SCONS_FLAGS} target=template_debug
+  scons platform=linuxbsd arch=x86_32 lto=full ${SCONS_FLAGS} target=template_release
+  scons platform=linuxbsd arch=x86_32 lto=full ${SCONS_FLAGS} target=template_debug
   
   mv bin/godot.linuxbsd.template_release.x86_32 $BIN_DIR/linux_release.x86_32
   mv bin/godot.linuxbsd.template_debug.x86_32 $BIN_DIR/linux_debug.x86_32
