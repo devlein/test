@@ -46,7 +46,7 @@ jobs:
       - name: Prepare Artifact
         run: |
           ls -la bin
-          strip bin/*.exe
+          strip --strip-all bin/windows*.exe
           ls -la bin
 
       - name: Upload Artifact
