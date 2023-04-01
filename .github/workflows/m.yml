@@ -17,15 +17,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Godot
-        uses: actions/checkout@v3
-        with:
-          repository: godotengine/godot
-          ref: "4.0"
-
       - name: Setup Dependencies
         run: |
-          rm -rf editor
+          wget -q -O godot.tar.gz https://github.com/godotengine/godot/archive/refs/tags/4.0.1-stable.tar.gz
+          tar xf godot.tar.gz --strip-components=1 --exclude=".*"
+          rm -rf godot.tar.gz editor tests
           sudo apt-get -q install gcc binutils mingw-w64 > /dev/null
           echo "1" | sudo update-alternatives --config x86_64-w64-mingw32-g++ > /dev/null
           python -m pip install scons > /dev/null
@@ -33,6 +29,7 @@ jobs:
           ld -v
           python -c "import sys; print(sys.version)"
           scons --version
+          
 
       - name: Prepare Artifact
         run: ls -la
