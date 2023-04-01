@@ -26,20 +26,13 @@ jobs:
       - name: Setup Dependencies
         run: |
           rm -rf editor
-          sudo apt-get -q install mingw-w64 > /dev/null
+          sudo apt-get -q gcc binutils install mingw-w64 > /dev/null
           echo "1" | sudo update-alternatives --config x86_64-w64-mingw32-g++ > /dev/null
           python -m pip install scons > /dev/null
           gcc -v
           ld -v
           python -c "import sys; print(sys.version)"
           scons --version
-
-      - name: Setup build cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ github.workspace }}/.scons-cache/
-          key: sconscache-windows
-          restore-keys: sconscache-windows
 
       - name: Prepare Artifact
         run: ls -la
@@ -48,7 +41,7 @@ jobs:
         env:
           SCONS_CACHE: ${{ github.workspace }}/.scons-cache/
           SCONS_CACHE_LIMIT: 512
-        run: scons platform=windows target=template_release arch=x86_64 use_mingw=yes lto=full ${{env.SCONSFLAGS}} ${{env.SCONSFILES}}
+        run: scons platform=windows target=template_release arch=x86_64 use_mingw=yes lto=full verbose=no warnings=no werror=no progress=no productions=yes
 
       - name: Prepare Artifact
         run: |
