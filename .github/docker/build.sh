@@ -1,10 +1,10 @@
 #!/bin/sh -l
 
-KEY=$1
-SCONS_FLAGS=productions=yes lto=full profile=custom.py build_feature_profile=feature_profile.build 
-BIN_DIR=/godot/templates
-
+export KEY=$1
+export SCONS_FLAGS=productions=yes lto=full profile=custom.py build_feature_profile=feature_profile.build 
+export BIN_DIR=/godot/templates
 export SCONS_CACHE=/godot/.scons-cache
+
 if [ ${#KEY} -ge 1 ]; then
   export SCRIPT_AES256_ENCRYPTION_KEY=$KEY
 fi
@@ -12,7 +12,7 @@ fi
 cd /godot/source
   
 if [ "$PLATFORM" == "windows" ]; then
-  scons platform=windows arch=x86_64 productions=yes lto=full use_mingw=yes $SCONS_FLAGS target=template_release
+  scons platform=windows arch=x86_64 use_mingw=yes $SCONS_FLAGS target=template_release
   scons platform=windows arch=x86_64 use_mingw=yes $SCONS_FLAGS target=template_debug
   
   mv bin/godot.windows.template_release.x86_64.exe $BIN_DIR/windows_release_x86_64.exe
