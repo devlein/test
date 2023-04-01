@@ -12,7 +12,7 @@ fi
 cd /godot/source
   
 if [ "$PLATFORM" == "windows" ]; then
-  scons platform=windows arch=x86_64 use_mingw=yes $SCONS_FLAGS target=template_release
+  scons platform=windows arch=x86_64 productions=yes lto=full use_mingw=yes $SCONS_FLAGS target=template_release
   scons platform=windows arch=x86_64 use_mingw=yes $SCONS_FLAGS target=template_debug
   
   mv bin/godot.windows.template_release.x86_64.exe $BIN_DIR/windows_release_x86_64.exe
