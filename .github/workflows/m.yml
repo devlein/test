@@ -26,7 +26,7 @@ jobs:
       - name: Setup Dependencies
         run: |
           rm -rf editor
-          sudo apt-get -q gcc binutils install mingw-w64 > /dev/null
+          sudo apt-get -q install gcc binutils mingw-w64 > /dev/null
           echo "1" | sudo update-alternatives --config x86_64-w64-mingw32-g++ > /dev/null
           python -m pip install scons > /dev/null
           gcc -v
