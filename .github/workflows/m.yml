@@ -38,12 +38,12 @@ jobs:
         env:
           SCONS_CACHE: ${{ github.workspace }}/.scons-cache/
           SCONS_CACHE_LIMIT: 512
-        run: scons platform=windows target=template_release arch=x86_64 use_mingw=yes lto=full verbose=no warnings=no werror=no progress=no productions=yes
+        run: scons platform=windows target=template_release arch=x86_64 use_mingw=yes use_lto=yes productions=yes
 
       - name: Prepare Artifact
         run: |
           ls -la bin
-          strip --strip-all bin/windows*.exe
+          strip --strip-all bin/*.exe
           ls -la bin
 
       - name: Upload Artifact
